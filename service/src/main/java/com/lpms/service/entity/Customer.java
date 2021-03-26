@@ -1,11 +1,9 @@
 package com.lpms.service.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
+@Table(name = "customers")
 public class Customer {
     // Attributes
     @Id
@@ -16,14 +14,6 @@ public class Customer {
     private String lastName;
     private String email;
     private String password;
-
-    // Constructors
-    public Customer(String firstName, String lastName, String email, String password) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.password = password;
-    }
 
     // Getters and Setters
     public Integer getId() { return id; }

@@ -34,8 +34,15 @@ public class CustomerController {
     // POST New Customer
     @PostMapping(path = "/create")
     public @ResponseBody String createCustomer(@RequestParam String firstName, @RequestParam String lastName, @RequestParam String email, @RequestParam String password) {
-        Customer customer = new Customer(firstName, lastName, email, password);
+        System.out.println("POST REQUEST - Create New Customer");
+        Customer customer = new Customer();
+        System.out.println("Creating new customer entity...");
+        customer.setFirstName(firstName);
+        customer.setLastName(lastName);
+        customer.setEmail(email);
+        customer.setPassword(password);
         customerRepository.save(customer);
-        return "Created!";
+        System.out.println("Saved Customer to DB");
+        return "Created with ID: " + customer.getId();
     }
 }

@@ -1,18 +1,14 @@
 package com.lpms.service.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
+@Table(name = "plates")
 public class Plate {
     // Attributes
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
-
-    //private Customer customerId;
 
     private String reg;
     private Boolean allocated;
@@ -27,9 +23,6 @@ public class Plate {
     public void setId(Integer id) {
         this.id = id;
     }
-
-//    public Customer getCustomerId() { return customerId; }
-//    public void setCustomerId(Customer customerId) { this.customerId = customerId; }
 
     public String getReg() {
         return reg;

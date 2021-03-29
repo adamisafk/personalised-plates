@@ -3,7 +3,7 @@ import { Button, Col, Form, Row } from 'react-bootstrap'
 
 function PlateForm() {
     return (
-        <div style={{paddingBottom: '30px'}}>
+        <div style={{paddingBottom: '50px'}}>
             <Form>
                 <Row>
                     <Col xs={8}>
@@ -23,8 +23,8 @@ function PlateForm() {
                     </Col>
                 </Row>
 
-                <Row>
-                    <Button type="submit">Search</Button>
+                <Row style={{justifyContent: 'center'}}>
+                    <Button variant="success" size="lg" type="submit">Search</Button>
                 </Row>
             </Form>
         </div>

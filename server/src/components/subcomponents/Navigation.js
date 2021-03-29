@@ -1,19 +1,22 @@
 import React from 'react'
 import { Navbar, Nav } from 'react-bootstrap'
+import { useLocation } from 'react-router-dom'
 
-function Navigation() {
+function Navigation(props) {
+    const location = useLocation()
     return (
         <div style={{paddingBottom: '30px'}}>
+            {console.log(props.location)}
             <Navbar sticky="top" bg="dark" variant="dark" expand="lg">
                 <Navbar.Brand href="/">License Plate Management System</Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="mr-auto">
-                    <Nav.Link href="/">Home</Nav.Link>
-                    <Nav.Link href="/about">About</Nav.Link>
+                    <Nav.Link className={`${location.pathname === "/" ? "active" : ""}`} href="/">Home</Nav.Link>
+                    <Nav.Link className={`${location.pathname === "/about" ? "active" : ""}`} href="/about">About</Nav.Link>
                 </Nav>
                 <Nav>
-                    <Nav.Link href="/profile">Profile</Nav.Link>
+                    <Nav.Link className={`${location.pathname === "/profile" ? "active" : ""}`} href="/profile">Profile</Nav.Link>
                 </Nav>
                 </Navbar.Collapse>
             </Navbar>

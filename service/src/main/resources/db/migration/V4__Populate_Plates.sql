@@ -1,0 +1,1 @@
+insert into plates (reg, allocated, price, style) values ('KY75 UWD', false, 200.0, 1)

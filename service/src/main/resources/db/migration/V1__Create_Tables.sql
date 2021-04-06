@@ -26,4 +26,3 @@ CREATE TABLE orders (
     ,FOREIGN KEY(customer_id) REFERENCES customers(id)
     ,FOREIGN KEY(plate_id) REFERENCES plates(id)
 );
-

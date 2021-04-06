@@ -2,6 +2,9 @@ package com.lpms.service.entity;
 
 import javax.persistence.*;
 
+
+import java.util.List;
+
 @Entity
 @Table(name = "customers")
 public class Customer {
@@ -14,6 +17,10 @@ public class Customer {
     private String lastName;
     private String email;
     private String password;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "customer_id")
+    private List<Order> orders;
 
     // Getters and Setters
     public Integer getId() { return id; }
@@ -30,4 +37,12 @@ public class Customer {
 
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
+
+    public List<Order> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Order> orders) {
+        this.orders = orders;
+    }
 }

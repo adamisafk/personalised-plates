@@ -11,43 +11,47 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
-    //private Customer customerId;
-    //private Plate plateId;
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
 
-    private Date orderDate;
-    private Integer Status; // 1: Processing, 2: Processed, 3: Refunded, 4: Sold
+    @ManyToOne
+    @JoinColumn(name = "plate_id")
+    private Plate plateId;
+
+    private Date date;
+    private Integer status; // 1: Processing, 2: Processed, 3: Refunded, 4: Sold
 
     // Getters and Setters
 
     public Integer getId() {
         return id;
     }
-
     public void setId(Integer id) {
         this.id = id;
     }
 
-//    public Customer getCustomerId() {
-//        return customerId;
-//    }
-//
-//    public void setCustomerId(Customer customerId) {
-//        this.customerId = customerId;
-//    }
-//
-//    public Plate getPlateId() {
-//        return plateId;
-//    }
-//
-//    public void setPlateId(Plate plateId) {
-//        this.plateId = plateId;
-//    }
-
-    public Date getOrderDate() {
-        return orderDate;
+    public Customer getCustomer() {
+        return customer;
+    }
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
-    public void setOrderDate(Date orderDate) {
-        this.orderDate = orderDate;
+    public Plate getPlateId() { return plateId; }
+    public void setPlateId(Plate plateId) { this.plateId = plateId; }
+
+    public Date getDate() {
+        return date;
+    }
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }

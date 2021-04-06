@@ -1,6 +1,7 @@
 package com.lpms.service.entity;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "plates")
@@ -14,6 +15,10 @@ public class Plate {
     private Boolean allocated;
     private Double price;
     private Integer style; // 1: LLNN LLL, 2: LN LLL, 3: LLL NNN
+
+    @OneToMany
+    @JoinColumn(name = "plate_id")
+    private List<Order> orders;
 
     // Getters and Setters
 
@@ -47,4 +52,7 @@ public class Plate {
     public void setStyle(Integer style) {
         this.style = style;
     }
+
+    public List<Order> getOrders() { return orders; }
+    public void setOrders(List<Order> orders) { this.orders = orders; }
 }

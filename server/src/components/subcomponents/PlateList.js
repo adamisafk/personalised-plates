@@ -1,31 +1,35 @@
-import React from 'react'
-import { Container, Row, Col } from 'react-bootstrap'
+import React, { Component } from 'react'
+import { Col, Container, Row } from 'react-bootstrap';
 
-function PlateList() {
-    return (
-        <div>
-            <Container className="text-center">
-                <Row className="pb-5">
-                    <Col>Plate 1</Col>
-                    <Col>Plate 2</Col>
-                    <Col>Plate 3</Col>
-                    <Col>Plate 4</Col>
-                </Row>
-                <Row className="pb-5">
-                    <Col>Plate 5</Col>
-                    <Col>Plate 6</Col>
-                    <Col>Plate 7</Col>
-                    <Col>Plate 8</Col>
-                </Row>
-                <Row className="pb-5">
-                    <Col>Plate 9</Col>
-                    <Col>Plate 10</Col>
-                    <Col>Plate 11</Col>
-                    <Col>Plate 12</Col>
-                </Row>
-            </Container>
-        </div>
-    )
+export class PlateList extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {plates: []}
+    }
+    componentDidMount() {
+        this.getAllPlates()
+    }
+    
+    getAllPlates() {
+        fetch('http://service:8080/plate/all')
+            .then(res => console.log(res))
+    }
+
+    render() {
+        const plates = this.state.plates.map((plate, i) => (
+            <Col>{plate.reg}</Col>
+        ))
+
+        return (
+            <div>
+                <Container className="text-center">
+                    <Row className="pb-5">
+                        {plates}
+                    </Row>
+                </Container>
+            </div>
+        )
+    }
 }
 
 export default PlateList

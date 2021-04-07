@@ -32,7 +32,7 @@ services:
 
   server:
     depends_on:
-      - mysql 
+      - mysql
       - service
     image: server
     build:

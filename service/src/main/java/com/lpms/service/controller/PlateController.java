@@ -4,12 +4,11 @@ import com.lpms.service.entity.Plate;
 import com.lpms.service.repository.PlateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin(origins = "http://server:80/")
+import java.util.Optional;
+
+@CrossOrigin
 @Controller
 @RequestMapping(path = "/plate")
 public class PlateController {
@@ -23,5 +22,10 @@ public class PlateController {
     @GetMapping(path = "/all")
     public @ResponseBody Iterable<Plate> getAllPlates() {
         return plateRepository.findAll();
+    }
+    // GET plate by ID
+    @GetMapping(path = "/{id}")
+    public @ResponseBody Optional<Plate> getPlate(@PathVariable Integer id) {
+        return plateRepository.findById(id);
     }
 }

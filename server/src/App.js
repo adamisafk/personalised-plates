@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import Navigation from './components/subcomponents/Navigation';
-import Footer from './components/subcomponents/Footer';
 import Home from './components/Home';
 import About from './components/About'
 import Profile from './components/Profile'
@@ -19,10 +18,8 @@ function App() {
             <Route path="/" exact component={() => <Home />} />
             <Route path="/about" exact component={() => <About />} />
             <Route path="/profile" exact component={() => <Profile />} />
-            <Route path="/plate" exact component={() => <Plate />} />
+            <Route path="/plate/:id" exact render={(props) => <Plate id={props} />} />
           </Switch>
-
-          <Footer/>
         </Router>
       </header>
     </div>

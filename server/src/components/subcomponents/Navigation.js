@@ -6,7 +6,6 @@ function Navigation(props) {
     const location = useLocation()
     return (
         <div style={{paddingBottom: '30px'}}>
-            {console.log(props.location)}
             <Navbar sticky="top" bg="dark" variant="dark" expand="lg">
                 <Navbar.Brand href="/">License Plate Management System</Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />

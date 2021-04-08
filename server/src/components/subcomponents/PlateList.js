@@ -5,18 +5,33 @@ import axios from 'axios'
 export class PlateList extends Component {
     constructor(props) {
         super(props)
-        this.state = {plates: []}
+        this.state = {
+            style: 0, //default style to 'All Styles'
+            plates: []
+        }
     }
     componentDidMount() {
-        this.getAllPlates()
+        // If a search query exists, call getPlateByQuery method
+        if(this.props.query[0]) {
+            this.getPlateByQuery()
+        }
     }
     
-    getAllPlates() {
-        axios.get('http://localhost:9300/plate/all')
-            .then(response => this.setState({ plates: response.data }))
+    // Calls API to get list of plates and sets the response payload in state
+    getPlateByQuery() {
+        if(this.props.query[1] === 0) {
+            // If style selected is 'All Styles', call api with search query without style as parameter
+            axios.get('http://localhost:9300/plate/find/' + this.props.query[0])
+                .then(response => this.setState({ plates: response.data }))
+        } else {
+            // If style selected is anything other than 'All Styles', call api with both search query and style
+            axios.get('http://localhost:9300/plate/find/' + this.props.query[0] + '/' + this.props.query[1])
+                .then(response => this.setState({ plates: response.data }))
+        }
     }
 
     render() {
+        // Map plates results as a card
         const plates = this.state.plates.map((plate, i) => (
             <Card style={{width: '18rem'}} bg="warning" key={plate.id}>
                 <Card.Body>

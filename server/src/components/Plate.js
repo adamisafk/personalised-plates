@@ -15,13 +15,13 @@ export class Plate extends Component {
         // Call API with ID
         axios.get('http://localhost:9300/plate/' + id)
             //.then(response => this.setState({ plate: response.data }))
-            .then(response => console.log(response.data))
+            .then(response => this.setState({ plate: response.data }))
     }
 
     render() {
         return (
             <div>
-
+                <h1>{this.state.plate.reg}</h1>
             </div>
         )
     }

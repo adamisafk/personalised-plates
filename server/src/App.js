@@ -7,6 +7,7 @@ import Home from './components/Home';
 import About from './components/About'
 import Profile from './components/Profile'
 import Plate from './components/Plate'
+import Payment from'./components/Payment'
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
             <Route path="/about" exact component={() => <About />} />
             <Route path="/profile" exact component={() => <Profile />} />
             <Route path="/plate/:id" exact render={(props) => <Plate id={props} />} />
+            <Route path="/payment" exact render={(props) => <Payment plate={props} />} />
           </Switch>
         </Router>
       </header>

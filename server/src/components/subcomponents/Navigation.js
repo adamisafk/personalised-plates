@@ -15,7 +15,7 @@ function Navigation(props) {
                     <Nav.Link className={`${location.pathname === "/about" ? "active" : ""}`} href="/about">About</Nav.Link>
                 </Nav>
                 <Nav>
-                    <Nav.Link className={`${location.pathname === "/profile" ? "active" : ""}`} href="/profile">Profile</Nav.Link>
+                    <Nav.Link className={`${location.pathname === "/profile" ? "active" : ""}`} href="/profile">My Account</Nav.Link>
                 </Nav>
                 </Navbar.Collapse>
             </Navbar>

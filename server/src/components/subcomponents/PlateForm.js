@@ -5,15 +5,20 @@ export class PlateForm extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            value: ''
+            textValue: '',
+            optionValue: ''
         }
-        this.handleChange = this.handleChange.bind(this)
+        this.handleTextChange = this.handleTextChange.bind(this)
+        this.handleOptionChange = this.handleOptionChange.bind(this)
     }
     componentDidMount() {
-        this.setState({ value: this.props.searchText })
+        this.setState({ textValue: this.props.searchText, optionValue: this.props.styleOption })
     }
-    handleChange(e) {
-        this.setState({ value: e.target.value})
+    handleTextChange(e) {
+        this.setState({ textValue: e.target.value})
+    }
+    handleOptionChange(e) {
+        this.setState({ optionValue: e.target.value})
     }
 
     render() {
@@ -23,12 +28,12 @@ export class PlateForm extends Component {
                 <Row>
                     <Col xs={8}>
                         <Form.Group controlId="formRegSearch.TextInput">
-                            <Form.Control value={this.state.value} onChange={this.handleChange} size="lg" type="text" name="search" placeholder="SEARCH" />
+                            <Form.Control value={this.state.textValue} onChange={this.handleTextChange} size="lg" type="text" name="search" placeholder="SEARCH" />
                         </Form.Group>
                     </Col>
                     <Col>
                         <Form.Group controlId="formRegSearch.StyleInput">
-                            <Form.Control size="lg" name="style" as="select">
+                            <Form.Control value={this.state.optionValue} onChange={this.handleOptionChange} size="lg" name="style" as="select">
                                 <option>All Styles</option>
                                 <option>AB18 ABC</option>
                                 <option>A1 ABC</option>

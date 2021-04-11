@@ -24,13 +24,11 @@ public class PlateController {
     // GET plate by Reg and Style
     @GetMapping(path = "/find/{searchQuery}/{style}")
     public @ResponseBody Iterable<Plate> findPlateByRegAndStyle(@PathVariable String searchQuery, @PathVariable Integer style) {
-        System.out.println("Hit reg and style endpoint!");
         return plateRepository.findByRegContainingAndStyle(searchQuery, style);
     }
     // GET plate by Reg
     @GetMapping(path = "/find/{searchQuery}")
     public @ResponseBody Iterable<Plate> findPlateByReg(@PathVariable String searchQuery) {
-        System.out.println("Hit reg endpoint!");
         return plateRepository.findByRegContaining(searchQuery);
     }
     // GET plate by ID

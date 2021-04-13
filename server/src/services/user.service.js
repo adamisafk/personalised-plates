@@ -6,7 +6,10 @@ const BASE_URL = "http://localhost:9300"
 class UserService {
     // Gets user details from auth token
     getUser() {
-        return axios.get(BASE_URL + "/customer/get", { headers: authHeader() })
+        return axios.get(BASE_URL + "/customer/get", {headers: authHeader()})
+    }
+    getOrders() {
+        return axios.get(BASE_URL + "/order/get", {headers: authHeader()})
     }
 
     // Place an order on a plate

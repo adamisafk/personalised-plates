@@ -7,16 +7,20 @@ export default class UserProfile extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            userDetails: {}
+            userDetails: {},
+            orders: {},
+            plates: {}
         }
     }
     componentDidMount() {
-        this.getUser()
-    }
-    getUser() {
+        // Get user details
         userService.getUser()
             .then(response => {this.setState({userDetails: response.data})})
+        // Get orders associated with user
+        userService.getOrders()
+            .then(response => this.setState({orders: response.data}))
     }
+
     render() {
         return (
             <div>
@@ -61,7 +65,7 @@ export default class UserProfile extends Component {
                     </Row>
                     <Row>
                         <Col>
-                            
+                            <p>{this.state.orders.date}</p>
                         </Col>
                     </Row>
                 </Container>

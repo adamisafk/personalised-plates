@@ -17,7 +17,7 @@ public class Order {
 
     @ManyToOne
     @JoinColumn(name = "plate_id")
-    private Plate plateId;
+    private Plate plate;
 
     private Date date;
     private Integer status; // 1: Processing, 2: Processed, 3: Refunded, 4: Sold
@@ -38,8 +38,8 @@ public class Order {
         this.customer = customer;
     }
 
-    public Plate getPlateId() { return plateId; }
-    public void setPlateId(Plate plateId) { this.plateId = plateId; }
+    public Plate getPlate() { return plate; }
+    public void setPlate(Plate plate) { this.plate = plate; }
 
     public Date getDate() {
         return date;

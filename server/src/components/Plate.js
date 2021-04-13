@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import { Button, Card, Container, Form, Row } from 'react-bootstrap'
-import Payment from './Payment'
+import { Redirect } from 'react-router'
 
 export class Plate extends Component {
     constructor(props) {
@@ -33,7 +33,10 @@ export class Plate extends Component {
         if(this.state.check) {
             // Clear error message and load payment component
             this.setState({errorMsg: ''})
-            return <Payment />
+            return <Redirect to={{
+                pathname: "/payment",
+                state: {plate: this.state.plate}
+            }} />
         } else {
             // Display error message
             this.setState({errorMsg: 'Please confirm that you understand the age of vehicle restriction.'})

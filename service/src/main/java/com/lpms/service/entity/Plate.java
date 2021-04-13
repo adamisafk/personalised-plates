@@ -1,10 +1,13 @@
 package com.lpms.service.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
 @Table(name = "plates")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "orders"})
 public class Plate {
     // Attributes
     @Id
@@ -17,7 +20,6 @@ public class Plate {
     private Integer style; // 1: LLNN LLL, 2: LN LLL, 3: LLL NNN
 
     @OneToMany
-    @JoinColumn(name = "plate_id")
     private List<Order> orders;
 
     // Getters and Setters

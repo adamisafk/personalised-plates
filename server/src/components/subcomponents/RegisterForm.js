@@ -10,26 +10,32 @@ export default class RegisterForm extends Component {
         this.state = {
             email: "",
             password: "",
+            firstName: "",
+            lastName: "",
             redirect: false
         }
         this.handleRegister = this.handleRegister.bind(this)
         this.onChangeEmail = this.onChangeEmail.bind(this)
         this.onChangePassword = this.onChangePassword.bind(this)
+        this.onChangeFirstName = this.onChangeFirstName.bind(this)
+        this.onChangeLastName = this.onChangeLastName.bind(this)
     }
-
     onChangeEmail(e) {
-        this.setState({
-            email: e.target.value
-        })
+        this.setState({email: e.target.value})
     }
     onChangePassword(e) {
-        this.setState({
-            password: e.target.value
-        })
+        this.setState({password: e.target.value})
     }
+    onChangeFirstName(e) {
+        this.setState({firstName: e.target.value})
+    }
+    onChangeLastName(e) {
+        this.setState({lastName: e.target.value})
+    }
+    
     handleRegister(e) {
         e.preventDefault()
-        authService.login(this.state.email, this.state.password).then(
+        authService.register(this.state.firstName, this.state.lastName, this.state.email, this.state.password).then(
             () => {
                 this.setState({redirect: true})
                 window.location.reload()
@@ -40,7 +46,7 @@ export default class RegisterForm extends Component {
     render() {
         const redirect = this.state.redirect
         if(redirect) {
-            return <Redirect to='/profile' />
+            return <Redirect to='/login' />
         }
         return (
             <div>
@@ -55,6 +61,14 @@ export default class RegisterForm extends Component {
                                 <Form.Group>
                                     <Form.Label>Password</Form.Label>
                                     <Form.Control type="password" placeholder="Enter password" value={this.state.password} onChange={this.onChangePassword} />
+                                </Form.Group>
+                                <Form.Group>
+                                    <Form.Label>First Name</Form.Label>
+                                    <Form.Control type="text" placeholder="Enter first name" value={this.state.firstName} onChange={this.onChangeFirstName} />
+                                </Form.Group>
+                                <Form.Group>
+                                    <Form.Label>Last Name</Form.Label>
+                                    <Form.Control type="text" placeholder="Enter last name" value={this.state.lastName} onChange={this.onChangeLastName} />
                                 </Form.Group>
                                 <Form.Group>
                                     <Button onClick={this.handleRegister}>Register</Button>

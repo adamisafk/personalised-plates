@@ -17,7 +17,7 @@ function Navigation(props) {
                 </Nav>
                 <Nav>
                     <Nav.Link className={`${location.pathname === "/profile" ? "active" : ""}`} href="/profile">My Account</Nav.Link>
-                    <Nav.Link className="active" href="/logout">Logout</Nav.Link>
+                    <Nav.Link className={`${localStorage.getItem("token") === null ? "d-none" : "active"}`} href="/logout">Logout</Nav.Link>
                 </Nav>
                 </Navbar.Collapse>
             </Navbar>

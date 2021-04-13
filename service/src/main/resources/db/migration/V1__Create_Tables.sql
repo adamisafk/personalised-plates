@@ -20,7 +20,7 @@ CREATE TABLE orders (
     id INT AUTO_INCREMENT
     ,customer_id INT NOT NULL
     ,plate_id INT NOT NULL
-    ,order_date DATETIME(6) NOT NULL
+    ,date DATETIME(6) NOT NULL
     ,status INT default(0) NOT NULL
     ,PRIMARY KEY (id)
     ,FOREIGN KEY(customer_id) REFERENCES customers(id)

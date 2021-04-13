@@ -4,6 +4,7 @@ import { useLocation } from 'react-router-dom'
 
 function Navigation(props) {
     const location = useLocation()
+
     return (
         <div style={{paddingBottom: '30px'}}>
             <Navbar sticky="top" bg="dark" variant="dark" expand="lg">
@@ -16,6 +17,7 @@ function Navigation(props) {
                 </Nav>
                 <Nav>
                     <Nav.Link className={`${location.pathname === "/profile" ? "active" : ""}`} href="/profile">My Account</Nav.Link>
+                    <Nav.Link className="active" href="/logout">Logout</Nav.Link>
                 </Nav>
                 </Navbar.Collapse>
             </Navbar>

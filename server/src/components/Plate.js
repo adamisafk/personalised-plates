@@ -20,7 +20,6 @@ export class Plate extends Component {
         var id = this.props.id.match.params.id
         // Call API with ID
         axios.get('http://localhost:9300/plate/' + id)
-            //.then(response => this.setState({ plate: response.data }))
             .then(response => this.setState({ plate: response.data }))
     }
     checkboxOnChange() {
@@ -42,6 +41,13 @@ export class Plate extends Component {
     }
 
     render() {
+        const renderBuyButton = () => {
+            if(this.state.plate.allocated === true) {
+                return <h3>Sorry, this plate is unavailable.</h3>
+            } else {
+                return <Button onClick={this.loadPayment} variant="success" size="lg">Buy Now</Button>
+            }
+        }
         return (
             <div>
                 <Container>
@@ -83,7 +89,7 @@ export class Plate extends Component {
                         <p style={{color: 'red'}}>{this.state.errorMsg}</p>
                     </Row>
                     <Row style={{justifyContent: 'center'}}>
-                        <Button onClick={this.loadPayment} variant="success" size="lg">Buy Now</Button>
+                        {renderBuyButton()}
                     </Row>
                 </Container>
             </div>

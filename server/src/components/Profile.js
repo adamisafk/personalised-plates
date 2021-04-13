@@ -1,31 +1,20 @@
-import React from 'react'
-import { Container, Row } from 'react-bootstrap'
+import React, { Component } from 'react'
+import UserProfile from './subcomponents/UserProfile'
 
-function Profile() {
-    return (
-        <div>
-            <Container>
-                <Row>
-                    <h1>Your Profile</h1> 
-                </Row>
+import authService from '../services/auth.service'
+import { Redirect } from 'react-router'
 
-
-                <Row>
-                    <h5>Personal Information</h5>
-                </Row>
-                <Row>
-                    <p>Blah blah blah</p>
-                </Row>
-
-                <Row>
-                    <h5>Your Plates</h5>
-                </Row>
-                <Row>
-                    <p>Blah blah blah</p>
-                </Row>
-            </Container>
-        </div>
-    )
+export class Profile extends Component {
+    render() {
+        if(authService.getToken() === null) {
+            return <Redirect to='/login' />
+        }
+        return (
+            <div>
+                <UserProfile />
+            </div>
+        )
+    }
 }
 
 export default Profile

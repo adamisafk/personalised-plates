@@ -10,11 +10,17 @@ export default class LoginForm extends Component {
         this.state = {
             email: "",
             password: "",
-            redirect: false
+            redirect: false,
+            msg: ""
         }
         this.handleLogin = this.handleLogin.bind(this)
         this.onChangeEmail = this.onChangeEmail.bind(this)
         this.onChangePassword = this.onChangePassword.bind(this)
+    }
+    componentDidMount(props) {
+        if(this.props.location.state) {
+            this.setState({msg: this.props.location.state.msg})
+        }
     }
 
     onChangeEmail(e) {
@@ -45,6 +51,7 @@ export default class LoginForm extends Component {
         return (
             <div>
                 <Container className="text-center">
+                    <p>{this.state.msg}</p>
                     <Row style={{justifyContent: 'center'}}>
                             <div className="card card-container bg-dark">
                             <Form style={{padding: '5rem', width: '30rem'}}>

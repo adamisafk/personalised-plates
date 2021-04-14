@@ -51,6 +51,7 @@ export default class RegisterForm extends Component {
         return (
             <div>
                 <Container className="text-center">
+                    <p></p>
                     <Row style={{justifyContent: 'center'}}>
                         <div className="card card-container bg-dark">
                             <Form style={{padding: '5rem', width: '30rem'}}>

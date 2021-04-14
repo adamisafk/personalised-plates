@@ -22,11 +22,11 @@ function App() {
             <Route path="/" exact component={() => <Home />} />
             <Route path="/about" exact component={() => <About />} />
             <Route path="/profile" exact component={() => <Profile />} />
-            <Route path="/login" exact component={() => <LoginForm />} />
+            <Route path="/login" exact component={(props) => <LoginForm {...props} />} />
             <Route path="/register" exact component={() => <RegisterForm />} />
             <Route path="/logout" exact component={() => <Logout />} />
             <Route path="/plate/:id" exact render={(props) => <Plate id={props} />} />
-            <Route path="/payment" exact render={(props) => <Payment plate={props} />} />
+            <Route path="/payment" exact render={(props) => <Payment {...props} />} />
           </Switch>
         </Router>
       </header>

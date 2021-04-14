@@ -13,8 +13,8 @@ class UserService {
     }
 
     // Place an order on a plate
-    createOrder() {
-
+    createOrder(plateId) {
+        return axios.post(BASE_URL + "/order/create?plateId=" + plateId, {headers: authHeader()})
     }
 
     // Updates order status if the user sells or transfers their registered plates

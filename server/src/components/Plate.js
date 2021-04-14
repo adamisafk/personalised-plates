@@ -6,7 +6,7 @@ import { Redirect } from 'react-router'
 export class Plate extends Component {
     constructor(props) {
         super(props)
-        this.state = {plate: [], check: false, errorMsg: ''}
+        this.state = {plate: [], check: false, errorMsg: '', redirect: false}
 
         this.checkboxOnChange = this.checkboxOnChange.bind(this)
         this.loadPayment = this.loadPayment.bind(this)
@@ -32,11 +32,7 @@ export class Plate extends Component {
     loadPayment() {
         if(this.state.check) {
             // Clear error message and load payment component
-            this.setState({errorMsg: ''})
-            return <Redirect to={{
-                pathname: "/payment",
-                state: {plate: this.state.plate}
-            }} />
+            this.setState({errorMsg: '', redirect: true})
         } else {
             // Display error message
             this.setState({errorMsg: 'Please confirm that you understand the age of vehicle restriction.'})
@@ -50,6 +46,13 @@ export class Plate extends Component {
             } else {
                 return <Button onClick={this.loadPayment} variant="success" size="lg">Buy Now</Button>
             }
+        }
+        const {redirect} = this.state
+        if(redirect) {
+            return <Redirect to={{
+                pathname: "/payment",
+                state: {plateId: this.state.plate.id}
+            }} />
         }
         return (
             <div>

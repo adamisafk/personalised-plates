@@ -13,8 +13,25 @@ class UserService {
     }
 
     // Place an order on a plate
-    createOrder(plateId) {
-        return axios.post(BASE_URL + "/order/create?plateId=" + plateId, {headers: authHeader()})
+    createPurchaseOrder(id) {
+        const data = {
+            plateId: id
+        }
+        return axios.post(BASE_URL + "/order/create/purchase", data, {headers: authHeader()} )
+    }
+    createRefundOrder(oId, pId) {
+        const data = {
+            orderId: oId,
+            plateId: pId
+        }
+        return axios.post(BASE_URL + "/order/create/refund", data, {headers: authHeader()})
+    }
+    createTransferOrder(email, oId) {
+        const data = {
+            email: email,
+            orderId: oId
+        }
+        return axios.post(BASE_URL + "/order/create/transfer", data, {headers: authHeader()})
     }
 
     // Updates order status if the user sells or transfers their registered plates

@@ -22,6 +22,7 @@ CREATE TABLE orders (
     ,plate_id INT NOT NULL
     ,date DATETIME(6) NOT NULL
     ,status INT default(0) NOT NULL
+    ,is_null BOOLEAN NOT NULL
     ,PRIMARY KEY (id)
     ,FOREIGN KEY(customer_id) REFERENCES customers(id)
     ,FOREIGN KEY(plate_id) REFERENCES plates(id)

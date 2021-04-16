@@ -1,4 +1,10 @@
 FROM ecr.tooling.dvla.gov.uk/base-images/openjre:8u191-jre
 WORKDIR /app
-COPY service/target/service-0.0.1-SNAPSHOT.jar /app/service.jar
+COPY target/service-0.0.1-SNAPSHOT.jar /app/service.jar
+
+# wait-for-it
+#COPY wait-for-it.sh /app/wait-for-it.sh
+#RUN chmod +x wait-for-it.sh
+#CMD ["./wait-for-it.sh", "mysql:3306", "--", "java", "-jar", "service.jar"]
+
 ENTRYPOINT ["java", "-jar", "service.jar"]

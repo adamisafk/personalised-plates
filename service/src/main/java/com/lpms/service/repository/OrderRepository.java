@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface OrderRepository extends CrudRepository<Order, Integer> {
     List<Order> findByCustomer(Customer customer);
+    List<Order> findByCustomerAndIsNullIsFalse(Customer customer);
 }

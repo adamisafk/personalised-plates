@@ -9,6 +9,7 @@ import com.lpms.service.repository.CustomerRepository;
 import com.lpms.service.service.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -28,8 +29,9 @@ public class CustomerController {
     /*
         --------  GET REQUESTS  --------
      */
-    // POST Get Customer Details (Protected by authorization)
+    // GET Customer Details (Protected by authorization)
     @GetMapping(path = "/get")
+    @Cacheable(value = "customerGet", key = "#token")
     public @ResponseBody Optional<Customer> getCustomer(@RequestHeader("Authorization") String token) {
         String customerEmail = JWT.require(Algorithm.HMAC512(AuthenticationConfigConstants.SECRET.getBytes()))
                 .build()

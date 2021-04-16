@@ -24,8 +24,22 @@ export default class UserProfile extends Component {
         return new Date(dateStr).toISOString().replace(/T/, ' ').replace(/\..+/, '')
     }
 
+    refundOnClick(orderId, plateId) {
+        userService.createRefundOrder(orderId, plateId)
+            .then(response => console.log(response.data))
+        window.location.reload()
+    }
+    transferOnClick(orderId) {
+        // Input email of new customer
+        var email = prompt("Please enter the email address of the new owner: ")
+        if(email != null) {
+           userService.createTransferOrder(email, orderId)
+            .then(response => console.log(response.data)) 
+        }
+    }
+
     render() {
-        const orders = this.state.orders.map((order, i) => {
+        const orders = [...this.state.orders].reverse().map((order, i) => {
             var status
             switch(order.status) {
                 case 1:
@@ -38,9 +52,12 @@ export default class UserProfile extends Component {
                     status = "Refunded"
                     break
                 case 4:
-                    status = "Sold"
+                    status = "On Sale"
                     break
                 case 5:
+                    status = "Sold"
+                    break
+                case 6:
                     status = "Transferred"
                     break
                 default:
@@ -56,16 +73,19 @@ export default class UserProfile extends Component {
             )
         })
         const plates = this.state.orders.map((order, i) => {
-            return (
-                <Card style={{width: '18rem'}} bg="warning" key={order.plate.id}>
-                <Card.Body>
-                    <Card.Title style={{color: 'black'}}>{order.plate.reg}</Card.Title>
-                    <Button className="mr-1" variant="success">Refund</Button>
-                    <Button className="mr-1" variant="success">Sell</Button>
-                    <Button className="mr-1" variant="success">Transfer</Button>
-                </Card.Body>
-            </Card>
-            )
+            if(order.plate.allocated === true && order.null === false) {
+                return (
+                    <Card style={{width: '18rem'}} bg="warning" key={order.plate.id}>
+                        <Card.Body>
+                            <Card.Title style={{color: 'black'}}>{order.plate.reg}</Card.Title>
+                            <Button onClick={() => this.refundOnClick(order.id, order.plate.id)} className="mr-1" variant="success">Refund</Button>
+                            <Button className="mr-1" variant="success">Sell</Button>
+                            <Button onClick={() => this.transferOnClick(order.id)} className="mr-1" variant="success">Transfer</Button>
+                        </Card.Body>
+                    </Card>
+                )
+            }
+            return null;
         })
         return (
             <div>

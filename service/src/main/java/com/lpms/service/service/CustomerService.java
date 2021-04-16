@@ -1,5 +1,8 @@
 package com.lpms.service.service;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.lpms.service.config.AuthenticationConfigConstants;
 import com.lpms.service.entity.Customer;
 import com.lpms.service.entity.request.CustomerCreateRequest;
 import com.lpms.service.repository.CustomerRepository;
@@ -31,5 +34,14 @@ public class CustomerService {
         customer.setFirstName(customerCreateRequest.getFirstName());
         customer.setLastName(customerCreateRequest.getLastName());
         customerRepository.save(customer);
+    }
+
+    public Customer readCustomerByToken(String token) {
+        String customerEmail = JWT.require(Algorithm.HMAC512(AuthenticationConfigConstants.SECRET.getBytes()))
+                .build()
+                .verify(token.replace(AuthenticationConfigConstants.TOKEN_PREFIX, ""))
+                .getSubject();
+        Optional<Customer> optionalCustomer = customerRepository.findByEmail(customerEmail);
+        return optionalCustomer.get();
     }
 }

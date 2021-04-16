@@ -4,14 +4,13 @@ import { Redirect } from 'react-router'
 
 import authService from '../services/auth.service'
 import userService from '../services/user.service'
-import authHeader from '../services/auth-header'
-import axios from 'axios'
 
 export class Payment extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            plateId: 0
+            plateId: 0,
+            redirect: false
         }
     }
     componentDidMount(props) {
@@ -20,9 +19,9 @@ export class Payment extends Component {
     }
 
     makePayment(plateId) {
-        userService.createOrder(plateId)
+        userService.createPurchaseOrder(plateId)
             .then(response => {
-                return <Redirect to="/profile" />
+                this.setState({redirect: true})
             })
     }
 
@@ -32,6 +31,9 @@ export class Payment extends Component {
                 pathname: "/login",
                 state: {msg: "You must login first"}
             }} />
+        }
+        if(this.state.redirect) {
+            return <Redirect to="/profile" />
         }
         return (
             <div>

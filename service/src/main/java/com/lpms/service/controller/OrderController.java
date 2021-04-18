@@ -5,13 +5,16 @@ import com.lpms.service.entity.Order;
 import com.lpms.service.entity.Plate;
 import com.lpms.service.entity.request.OrderCreateRefundRequest;
 import com.lpms.service.entity.request.OrderCreateRequest;
+import com.lpms.service.entity.request.OrderCreateSaleRequest;
 import com.lpms.service.entity.request.OrderTransferRequest;
 import com.lpms.service.repository.OrderRepository;
 import com.lpms.service.repository.PlateRepository;
 import com.lpms.service.service.CustomerService;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -30,7 +33,6 @@ public class OrderController {
     private final OrderRepository orderRepository;
     private final PlateRepository plateRepository;
     private final CustomerService customerService;
-
     /*
         --------  GET REQUESTS  --------
      */
@@ -50,7 +52,12 @@ public class OrderController {
      */
     // POST New Order as Processed
     @PostMapping(path = "/create/purchase")
-    @CacheEvict(value = "ordersGetByToken", key = "#token")
+    @Caching(evict = {
+        @CacheEvict(value = "ordersGetByToken", key = "#token"),
+        @CacheEvict(value = "platesWithStyle", allEntries = true),
+        @CacheEvict(value = "platesWithoutStyle", allEntries = true),
+        @CacheEvict(value = "platesWithId", allEntries = true)
+    })
     public ResponseEntity createOrder(@RequestHeader("Authorization") String token, @RequestBody OrderCreateRequest orderCreateRequest) {
         // Get Customer
         Customer customer = customerService.readCustomerByToken(token);
@@ -79,7 +86,12 @@ public class OrderController {
 
     // POST Create New Order as Refund
     @PostMapping(path = "/create/refund")
-    @CacheEvict(value = "ordersGetByToken", key = "#token")
+    @Caching(evict = {
+            @CacheEvict(value = "ordersGetByToken", key = "#token"),
+            @CacheEvict(value = "platesWithStyle", allEntries = true),
+            @CacheEvict(value = "platesWithoutStyle", allEntries = true),
+            @CacheEvict(value = "platesWithId", allEntries = true)
+    })
     public ResponseEntity<String> createRefundOrder(@RequestHeader("Authorization") String token, @RequestBody OrderCreateRefundRequest orderCreateRefundRequest) {
         // Check if customer associated with token is identical to customer of request order
         Optional<Order> optionalOrder = orderRepository.findById(orderCreateRefundRequest.getOrderId());
@@ -113,7 +125,12 @@ public class OrderController {
 
     // POST Transfer ownership of plates
     @PostMapping(path = "/create/transfer")
-    @CacheEvict(value = "ordersGetByToken", key = "#token")
+    @Caching(evict = {
+            @CacheEvict(value = "ordersGetByToken", key = "#token"),
+            @CacheEvict(value = "platesWithStyle", allEntries = true),
+            @CacheEvict(value = "platesWithoutStyle", allEntries = true),
+            @CacheEvict(value = "platesWithId", allEntries = true)
+    })
     public ResponseEntity<String> transferOrder(@RequestHeader("Authorization") String token, @RequestBody OrderTransferRequest orderTransferRequest) {
         Boolean isAuth = doesCustomerOwnOrder(token, orderRepository.findById(orderTransferRequest.getOrderId()));
         if(!isAuth) {
@@ -141,6 +158,49 @@ public class OrderController {
         orderRepository.save(order);
 
         return ResponseEntity.ok().body("Plate has been transferred!");
+    }
+
+    // POST Create New 'For Sale' order
+    @PostMapping(value = "/create/sale")
+    @Caching(evict = {
+            @CacheEvict(value = "ordersGetByToken", key = "#token"),
+            @CacheEvict(value = "platesWithStyle", allEntries = true),
+            @CacheEvict(value = "platesWithoutStyle", allEntries = true),
+            @CacheEvict(value = "platesWithId", allEntries = true)
+    })
+    public ResponseEntity<String> createSaleOrder(@RequestHeader("Authorization") String token, @RequestBody OrderCreateSaleRequest orderCreateSaleRequest) {
+        // Check if customer identified by token is same as customer who owns plate
+        Boolean isAuth = doesCustomerOwnOrder(token, orderRepository.findById(orderCreateSaleRequest.getPrevOrderId()));
+        if(!isAuth) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Mismatch of authorized customer and customer of the order.");
+        }
+        // Try parsing price as double
+        double price;
+        try {
+            price = Double.parseDouble(orderCreateSaleRequest.getPrice());
+        } catch(NumberFormatException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Failed to parse double");
+        }
+        // Nullify previous order
+        Optional<Order> optionalOrder = orderRepository.findById(orderCreateSaleRequest.getPrevOrderId());
+        Order prevOrder = optionalOrder.get();
+        prevOrder.setNull(true);
+        orderRepository.save(prevOrder);
+        // Update plate data
+        Plate plate = prevOrder.getPlate();
+        plate.setAllocated(false);
+        plate.setPrice(price);
+        // Create new sale order
+        Order order = new Order();
+        order.setPlate(plate);
+        Timestamp date = new Timestamp(new Date().getTime());
+        order.setDate(date);
+        order.setNull(false);
+        order.setStatus(4);
+        order.setCustomer(customerService.readCustomerByToken(token));
+        orderRepository.save(order);
+
+        return ResponseEntity.ok().body("Plate is now on sale!");
     }
 
 

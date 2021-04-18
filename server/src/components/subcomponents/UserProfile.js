@@ -37,6 +37,17 @@ export default class UserProfile extends Component {
             .then(response => console.log(response.data)) 
         }
     }
+    sellOnClick(orderId, plateId) {
+        let price = prompt("Please enter the price you want to sell at: ")
+        if(price != null) {
+            userService.createSellOrder(orderId, plateId, price)
+            .then(response => {
+                if(response.data === "Failed to parse double") {
+                    alert("Incorrect formatting for price. Please type in decimal without the £, for example: 23.12")
+                }
+            })
+        }
+    }
 
     render() {
         const orders = [...this.state.orders].reverse().map((order, i) => {
@@ -79,7 +90,7 @@ export default class UserProfile extends Component {
                         <Card.Body>
                             <Card.Title style={{color: 'black'}}>{order.plate.reg}</Card.Title>
                             <Button onClick={() => this.refundOnClick(order.id, order.plate.id)} className="mr-1" variant="success">Refund</Button>
-                            <Button className="mr-1" variant="success">Sell</Button>
+                            <Button onClick={() => this.sellOnClick(order.id, order.plate.id)} className="mr-1" variant="success">Sell</Button>
                             <Button onClick={() => this.transferOnClick(order.id)} className="mr-1" variant="success">Transfer</Button>
                         </Card.Body>
                     </Card>

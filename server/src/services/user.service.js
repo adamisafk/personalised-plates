@@ -33,6 +33,14 @@ class UserService {
         }
         return axios.post(BASE_URL + "/order/create/transfer", data, {headers: authHeader()})
     }
+    createSellOrder(orderId, pId, priceStr) {
+        const data = {
+            prevOrderId: orderId,
+            plateId: pId,
+            price: priceStr
+        }
+        return axios.post(BASE_URL + "/order/create/sale", data, {headers: authHeader()})
+    }
 
     // Updates order status if the user sells or transfers their registered plates
     changeOrder() {

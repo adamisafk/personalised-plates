@@ -3,6 +3,7 @@ package com.lpms.service.controller;
 import com.lpms.service.entity.Plate;
 import com.lpms.service.repository.PlateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;

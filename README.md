@@ -1,6 +1,6 @@
-# License Plate Managmenet System
+# License Plate Management System
 
-A full-stack application to allow users to 
+A full-stack application to allow users to manage personalised plates.
 
 ## Prerequisites
 

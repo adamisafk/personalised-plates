@@ -26,15 +26,14 @@ export default class UserProfile extends Component {
 
     refundOnClick(orderId, plateId) {
         userService.createRefundOrder(orderId, plateId)
-            .then(response => console.log(response.data))
-        window.location.reload()
+            .then(window.location.reload())
     }
     transferOnClick(orderId) {
         // Input email of new customer
         var email = prompt("Please enter the email address of the new owner: ")
         if(email != null) {
            userService.createTransferOrder(email, orderId)
-            .then(response => console.log(response.data)) 
+            .then(window.location.reload()) 
         }
     }
     sellOnClick(orderId, plateId) {
@@ -46,6 +45,24 @@ export default class UserProfile extends Component {
                     alert("Incorrect formatting for price. Please type in decimal without the £, for example: 23.12")
                 }
             })
+            .then(window.location.reload())
+        }
+    }
+
+    cancelOnClick(orderId) {
+        userService.cancelSaleOrder(orderId)
+            .then(window.location.reload())
+    }
+    changePriceOnClick(plateId) {
+        let price = prompt("Please enter the new price you want to sell at: ")
+        if(price != null) {
+            userService.changePlatePrice(plateId, price)
+                .then(response => {
+                    if(response.data === "Failed to parse double") {
+                        alert("Incorrect formatting for price. Please type in decimal without the £, for example: 23.12")
+                    }
+                    window.location.reload()
+                })
         }
     }
 
@@ -84,11 +101,25 @@ export default class UserProfile extends Component {
             )
         })
         const plates = this.state.orders.map((order, i) => {
+            // Render plates that are on sale
+            if(order.null === false && order.status === 4) {
+                return (
+                    <Card style={{width: '18rem'}} bg="warning" key={order.plate.id}>
+                        <Card.Body>
+                            <Card.Title className="license-font" style={{color: 'black', fontSize: '40px'}}>{order.plate.reg}</Card.Title>
+                            <Card.Subtitle className="mb-2 text-muted">ON SALE FOR: £{order.plate.price}</Card.Subtitle>
+                            <Button onClick={() => this.cancelOnClick(order.id)} className="mr-1" variant="success">Cancel Sale</Button>
+                            <Button onClick={() => this.changePriceOnClick(order.plate.id)} className="mr-1" variant="success">Change Price</Button>
+                        </Card.Body>
+                    </Card>
+                )
+            }
+            // Render plates if its allocated to user and order is not nullified
             if(order.plate.allocated === true && order.null === false) {
                 return (
                     <Card style={{width: '18rem'}} bg="warning" key={order.plate.id}>
                         <Card.Body>
-                            <Card.Title style={{color: 'black'}}>{order.plate.reg}</Card.Title>
+                            <Card.Title className="license-font" style={{color: 'black', fontSize: '40px'}}>{order.plate.reg}</Card.Title>
                             <Button onClick={() => this.refundOnClick(order.id, order.plate.id)} className="mr-1" variant="success">Refund</Button>
                             <Button onClick={() => this.sellOnClick(order.id, order.plate.id)} className="mr-1" variant="success">Sell</Button>
                             <Button onClick={() => this.transferOnClick(order.id)} className="mr-1" variant="success">Transfer</Button>

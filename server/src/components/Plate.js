@@ -63,7 +63,7 @@ export class Plate extends Component {
                     <Row style={{justifyContent: 'center', padding: "10px"}}>
                         <Card style={{width: '18', textAlign: 'center'}} bg="warning">
                             <Card.Body>
-                                <Card.Title style={{color: 'black', fontSize: "80px"}}>{this.state.plate.reg}</Card.Title>
+                                <Card.Title className="license-font" style={{color: 'black', fontSize: "100px"}}>{this.state.plate.reg}</Card.Title>
                             </Card.Body>
                         </Card> 
                     </Row>

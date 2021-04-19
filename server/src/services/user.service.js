@@ -8,6 +8,7 @@ class UserService {
     getUser() {
         return axios.get(BASE_URL + "/customer/get", {headers: authHeader()})
     }
+    // Gets all orders by user identified by authorization token
     getOrders() {
         return axios.get(BASE_URL + "/order/get", {headers: authHeader()})
     }
@@ -19,6 +20,7 @@ class UserService {
         }
         return axios.post(BASE_URL + "/order/create/purchase", data, {headers: authHeader()} )
     }
+    // Refunds ordered plate
     createRefundOrder(oId, pId) {
         const data = {
             orderId: oId,
@@ -26,6 +28,7 @@ class UserService {
         }
         return axios.post(BASE_URL + "/order/create/refund", data, {headers: authHeader()})
     }
+    // Creates a new tranfer order for another user
     createTransferOrder(email, oId) {
         const data = {
             email: email,
@@ -33,6 +36,7 @@ class UserService {
         }
         return axios.post(BASE_URL + "/order/create/transfer", data, {headers: authHeader()})
     }
+    // Creates new sale order
     createSellOrder(orderId, pId, priceStr) {
         const data = {
             prevOrderId: orderId,
@@ -41,10 +45,20 @@ class UserService {
         }
         return axios.post(BASE_URL + "/order/create/sale", data, {headers: authHeader()})
     }
-
-    // Updates order status if the user sells or transfers their registered plates
-    changeOrder() {
-        
+    // Changes price of plate on sale
+    changePlatePrice(pId, priceStr) {
+        const data = {
+            plateId: pId,
+            price: priceStr
+        }
+        return axios.post(BASE_URL + "/plate/edit/price", data, {headers: authHeader()})
+    }
+    // Cancel Sale Order
+    cancelSaleOrder(oId) {
+        const data = {
+            orderId: oId
+        }
+        return axios.post(BASE_URL + "/order/delete", data, {headers: authHeader()})
     }
 }
 

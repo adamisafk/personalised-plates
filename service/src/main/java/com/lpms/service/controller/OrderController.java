@@ -3,15 +3,11 @@ package com.lpms.service.controller;
 import com.lpms.service.entity.Customer;
 import com.lpms.service.entity.Order;
 import com.lpms.service.entity.Plate;
-import com.lpms.service.entity.request.OrderCreateRefundRequest;
-import com.lpms.service.entity.request.OrderCreateRequest;
-import com.lpms.service.entity.request.OrderCreateSaleRequest;
-import com.lpms.service.entity.request.OrderTransferRequest;
+import com.lpms.service.entity.request.*;
 import com.lpms.service.repository.OrderRepository;
 import com.lpms.service.repository.PlateRepository;
 import com.lpms.service.service.CustomerService;
 import lombok.RequiredArgsConstructor;
-import org.apache.coyote.Response;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
@@ -203,10 +199,32 @@ public class OrderController {
         return ResponseEntity.ok().body("Plate is now on sale!");
     }
 
-
-
-
-
+    // POST Cancel Sale Order by Deleting Entry
+    @PostMapping("/delete")
+    @Caching(evict = {
+            @CacheEvict(value = "ordersGetByToken", key = "#token"),
+            @CacheEvict(value = "platesWithStyle", allEntries = true),
+            @CacheEvict(value = "platesWithoutStyle", allEntries = true),
+            @CacheEvict(value = "platesWithId", allEntries = true)
+    })
+    public ResponseEntity<String> cancelSaleOrder(@RequestHeader("Authorization") String token, @RequestBody OrderCancelSaleRequest orderCancelSaleRequest) {
+        // Check if customer identified by token is same as customer who owns plate
+        Boolean isAuth = doesCustomerOwnOrder(token, orderRepository.findById(orderCancelSaleRequest.getOrderId()));
+        if(!isAuth) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Mismatch of authorized customer and customer of the order.");
+        }
+        // Get order
+        Optional<Order> optionalOrder = orderRepository.findById(orderCancelSaleRequest.getOrderId());
+        Order order = optionalOrder.get();
+        // Check if order has "On Sale" status
+        if(order.getStatus() != 4) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Order is not on sale, cannot cancel.");
+        }
+        // Delete order
+        orderRepository.delete(order);
+        // Get previous order and revert nullification
+        return ResponseEntity.ok().body("Sale order has been cancelled!");
+    }
 
 
     /*

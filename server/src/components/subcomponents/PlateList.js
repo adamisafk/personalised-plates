@@ -35,7 +35,7 @@ export class PlateList extends Component {
         const plates = this.state.plates.map((plate, i) => (
             <Card style={{width: '18rem'}} bg="warning" key={plate.id}>
                 <Card.Body>
-                    <Card.Title style={{color: 'black'}}>{plate.reg}</Card.Title>
+                    <Card.Title className="license-font" style={{color: 'black', fontSize: '40px'}}>{plate.reg}</Card.Title>
                     <Card.Subtitle className="mb-2 text-muted">{plate.allocated === true ? "Unavailable" : "Available"}</Card.Subtitle>
                     <Card.Subtitle className="mb-2 text-muted">£{plate.price}</Card.Subtitle>
                     <Button variant="success" href={"/plate/" + plate.id}>View</Button>

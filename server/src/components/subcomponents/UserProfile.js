@@ -20,6 +20,7 @@ export default class UserProfile extends Component {
         userService.getOrders()
             .then(response => {this.setState({orders: response.data})})
     }
+
     formatDate(dateStr) {
         return new Date(dateStr).toISOString().replace(/T/, ' ').replace(/\..+/, '')
     }
@@ -68,6 +69,7 @@ export default class UserProfile extends Component {
 
     render() {
         const orders = [...this.state.orders].reverse().map((order, i) => {
+            console.log(order)
             var status
             switch(order.status) {
                 case 1:

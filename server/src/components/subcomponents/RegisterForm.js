@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {Button, Container, Row, Form} from 'react-bootstrap'
+import {Button, Container, Row, Form, Spinner} from 'react-bootstrap'
 import { Redirect } from 'react-router'
 
 import authService from "../../services/auth.service";
@@ -10,34 +10,25 @@ export default class RegisterForm extends Component {
         this.state = {
             email: "",
             password: "",
+            passConf: "",
             firstName: "",
             lastName: "",
-            redirect: false
+            redirect: false,
+            loading: false
         }
+        this.onChange = this.onChange.bind(this)
         this.handleRegister = this.handleRegister.bind(this)
-        this.onChangeEmail = this.onChangeEmail.bind(this)
-        this.onChangePassword = this.onChangePassword.bind(this)
-        this.onChangeFirstName = this.onChangeFirstName.bind(this)
-        this.onChangeLastName = this.onChangeLastName.bind(this)
     }
-    onChangeEmail(e) {
-        this.setState({email: e.target.value})
-    }
-    onChangePassword(e) {
-        this.setState({password: e.target.value})
-    }
-    onChangeFirstName(e) {
-        this.setState({firstName: e.target.value})
-    }
-    onChangeLastName(e) {
-        this.setState({lastName: e.target.value})
+    onChange(e) {
+        this.setState({[e.target.name]: e.target.value})
     }
     
     handleRegister(e) {
         e.preventDefault()
+        this.setState({loading: true})
         authService.register(this.state.firstName, this.state.lastName, this.state.email, this.state.password).then(
             () => {
-                this.setState({redirect: true})
+                this.setState({redirect: true, loading: false})
                 window.location.reload()
             }
         )
@@ -48,6 +39,21 @@ export default class RegisterForm extends Component {
         if(redirect) {
             return <Redirect to='/login' />
         }
+        const renderSpinner = () => {
+            // if loading state variable is true, render spinner in button
+            if(this.state.loading) {
+                return (
+                    <Spinner
+                        as="span"
+                        animation="border"
+                        size="sm"
+                        role="status"
+                        aria-hidden="true"
+                    />
+                )
+            }
+            return "Register"
+        }
         return (
             <div>
                 <Container className="text-center">
@@ -57,22 +63,28 @@ export default class RegisterForm extends Component {
                             <Form style={{padding: '5rem', width: '30rem'}}>
                                 <Form.Group>
                                     <Form.Label>Email</Form.Label>
-                                    <Form.Control type="email" placeholder="Enter email" value={this.state.email} onChange={this.onChangeEmail} />
+                                    <Form.Control name="email" type="email" placeholder="Enter email" value={this.state.email} onChange={this.onChange} />
                                 </Form.Group>
                                 <Form.Group>
                                     <Form.Label>Password</Form.Label>
-                                    <Form.Control type="password" placeholder="Enter password" value={this.state.password} onChange={this.onChangePassword} />
+                                    <Form.Control name="password" type="password" placeholder="Enter password" value={this.state.password} onChange={this.onChange} />
+                                </Form.Group>
+                                <Form.Group>
+                                    <Form.Label>Confirm Password</Form.Label>
+                                    <Form.Control name="passConf" type="password" placeholder="Re-Enter password" value={this.state.passConf} onChange={this.onChange} />
                                 </Form.Group>
                                 <Form.Group>
                                     <Form.Label>First Name</Form.Label>
-                                    <Form.Control type="text" placeholder="Enter first name" value={this.state.firstName} onChange={this.onChangeFirstName} />
+                                    <Form.Control name="firstName" type="text" placeholder="Enter first name" value={this.state.firstName} onChange={this.onChange} />
                                 </Form.Group>
                                 <Form.Group>
                                     <Form.Label>Last Name</Form.Label>
-                                    <Form.Control type="text" placeholder="Enter last name" value={this.state.lastName} onChange={this.onChangeLastName} />
+                                    <Form.Control name="lastName" type="text" placeholder="Enter last name" value={this.state.lastName} onChange={this.onChange} />
                                 </Form.Group>
                                 <Form.Group>
-                                    <Button onClick={this.handleRegister}>Register</Button>
+                                    <Button onClick={this.handleRegister}>
+                                        {renderSpinner()}
+                                    </Button>
                                 </Form.Group>
                             </Form>
                         </div>

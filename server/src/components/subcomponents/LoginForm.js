@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {Button, Container, Row, Form} from 'react-bootstrap'
+import {Button, Container, Row, Form, Spinner} from 'react-bootstrap'
 import { Redirect } from 'react-router'
 
 import authService from "../../services/auth.service";
@@ -11,11 +11,11 @@ export default class LoginForm extends Component {
             email: "",
             password: "",
             redirect: false,
-            msg: ""
+            msg: "",
+            loading: false
         }
         this.handleLogin = this.handleLogin.bind(this)
-        this.onChangeEmail = this.onChangeEmail.bind(this)
-        this.onChangePassword = this.onChangePassword.bind(this)
+        this.onChange = this.onChange.bind(this)
     }
     componentDidMount(props) {
         if(this.props.location.state) {
@@ -23,21 +23,15 @@ export default class LoginForm extends Component {
         }
     }
 
-    onChangeEmail(e) {
-        this.setState({
-            email: e.target.value
-        })
-    }
-    onChangePassword(e) {
-        this.setState({
-            password: e.target.value
-        })
+    onChange(e) {
+        this.setState({ [e.target.name]: e.target.value })
     }
     handleLogin(e) {
         e.preventDefault()
+        this.setState({loading: true})
         authService.login(this.state.email, this.state.password).then(
             () => {
-                this.setState({redirect: true})
+                this.setState({redirect: true, loading: false})
                 window.location.reload()
             }
         )
@@ -48,6 +42,22 @@ export default class LoginForm extends Component {
         if(redirect) {
             return <Redirect to='/profile' />
         }
+        const renderSpinner = () => {
+            // if loading state variable is true, render spinner in button
+            if(this.state.loading) {
+                return (
+                    <Spinner
+                        as="span"
+                        animation="border"
+                        size="sm"
+                        role="status"
+                        aria-hidden="true"
+                    />
+                )
+            }
+            return "Login"
+        }
+
         return (
             <div>
                 <Container className="text-center">
@@ -57,14 +67,14 @@ export default class LoginForm extends Component {
                             <Form style={{padding: '5rem', width: '30rem'}}>
                                 <Form.Group>
                                     <Form.Label>Email</Form.Label>
-                                    <Form.Control type="email" placeholder="Enter email" value={this.state.email} onChange={this.onChangeEmail} />
+                                    <Form.Control name="email" type="email" placeholder="Enter email" value={this.state.email} onChange={this.onChange} />
                                 </Form.Group>
                                 <Form.Group>
                                     <Form.Label>Password</Form.Label>
-                                    <Form.Control type="password" placeholder="Enter password" value={this.state.password} onChange={this.onChangePassword} />
+                                    <Form.Control name="password" type="password" placeholder="Enter password" value={this.state.password} onChange={this.onChange} />
                                 </Form.Group>
                                 <Form.Group>
-                                    <Button onClick={this.handleLogin}>Login</Button>
+                                    <Button onClick={this.handleLogin}>{renderSpinner()}</Button>
                                 </Form.Group>
                             </Form>
                         </div>

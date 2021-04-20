@@ -67,6 +67,13 @@ public class OrderController {
             plate.setAllocated(true);
             plateRepository.save(plate);
         }
+        // Check if "On Sale" order exists for the plate. If it does, update the order to "Sold" and nullify
+        Order saleOrder = orderRepository.findTopByPlateAndIsNullFalseAndStatusEquals(plate, 4);
+        if(saleOrder != null) {
+            saleOrder.setStatus(5);
+            saleOrder.setNull(true);
+            orderRepository.save(saleOrder);
+        }
         // Save new order
         Order order = new Order();
         order.setNull(false);
@@ -222,7 +229,15 @@ public class OrderController {
         }
         // Delete order
         orderRepository.delete(order);
-        // Get previous order and revert nullification
+        // Get previous order, revert order nullification and re-allocated plate
+        Customer customer = customerService.readCustomerByToken(token);
+        Optional<Plate> optionalPlate = plateRepository.findById(order.getPlate().getId());
+        Plate plate = optionalPlate.get();
+        plate.setAllocated(true);
+        Order prevOrder = orderRepository.findTopByCustomerAndPlateAndIsNullTrue(customer, plate);
+        prevOrder.setNull(false);
+        orderRepository.save(prevOrder);
+
         return ResponseEntity.ok().body("Sale order has been cancelled!");
     }
 

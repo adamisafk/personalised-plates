@@ -15,7 +15,6 @@ export class Payment extends Component {
     }
     componentDidMount(props) {
         this.setState({plateId: this.props.location.state.plateId})
-        this.makePayment(this.props.location.state.plateId)
     }
 
     makePayment(plateId) {
@@ -42,10 +41,10 @@ export class Payment extends Component {
                         <h1>Payment of {this.state.plateId}</h1>
                     </Row>
                     <Row style={{justifyContent: 'center'}}>
-                        <h3>Payment portal goes here</h3>
+                        <h3>Payment portal goes here...</h3>
                     </Row>
-                    <Row style={{justifyContent: 'center'}}>
-                        
+                    <Row style={{justifyContent: 'center', paddingTop: '50px'}}>
+                        <Button onClick={() => this.makePayment(this.state.plateId)}>Make Payment</Button>
                     </Row>
                 </Container>
             </div>

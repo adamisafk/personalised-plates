@@ -11,7 +11,7 @@ export default class LoginForm extends Component {
             email: "",
             password: "",
             redirect: false,
-            msg: "",
+            msg: [],
             loading: false
         }
         this.handleLogin = this.handleLogin.bind(this)
@@ -24,17 +24,45 @@ export default class LoginForm extends Component {
     }
 
     onChange(e) {
+        e.preventDefault()
         this.setState({ [e.target.name]: e.target.value })
     }
     handleLogin(e) {
         e.preventDefault()
-        this.setState({loading: true})
-        authService.login(this.state.email, this.state.password).then(
-            () => {
-                this.setState({redirect: true, loading: false})
-                window.location.reload()
-            }
-        )
+        // Reset error messages
+        this.setState({msg: []})
+        let errorMsg = []
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i; // Regex to check if email format is valid
+
+        // Run validation checks, pushing appropriate messages to array if caught
+        if(!this.state.email) {
+            errorMsg.push("Email cannot be empty!")
+        } else if(!regex.test(this.state.email)) {
+            errorMsg.push("Email is invalid!")
+        }
+        if(!this.state.password) {
+            errorMsg.push("Password cannot be empty!")
+        } else if(this.state.password.length < 6) {
+            errorMsg.push("Password must be more than 6 characters!")
+        }
+
+        // Set error messages to state
+        this.setState({msg: errorMsg})
+
+        // If error messages are empty, attempt login
+        if(!errorMsg[0]) {
+           this.setState({loading: true})
+            authService.login(this.state.email, this.state.password).then(
+                () => {
+                    this.setState({redirect: true, loading: false})
+                    window.location.reload()
+                }
+            ).catch(function(error) {
+                if(error.response) {
+                    this.setState({msg: ["Email and/or password is incorrect!"], loading: false})
+                }
+            })
+        }
     }
 
     render() {
@@ -57,11 +85,14 @@ export default class LoginForm extends Component {
             }
             return "Login"
         }
+        const errorMessages = this.state.msg.map(message => {
+            return <p>{message}</p>
+        })
 
         return (
             <div>
                 <Container className="text-center">
-                    <p>{this.state.msg}</p>
+                    {errorMessages}
                     <Row style={{justifyContent: 'center'}}>
                             <div className="card card-container bg-dark">
                             <Form style={{padding: '5rem', width: '30rem'}}>

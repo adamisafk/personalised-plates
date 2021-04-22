@@ -28,7 +28,7 @@ export class Payment extends Component {
         if(authService.getToken() === null) {
             return <Redirect to={{
                 pathname: "/login",
-                state: {msg: "You must login first"}
+                state: {msg: ["You must login first"]}
             }} />
         }
         if(this.state.redirect) {

@@ -14,7 +14,8 @@ export default class RegisterForm extends Component {
             firstName: "",
             lastName: "",
             redirect: false,
-            loading: false
+            loading: false,
+            msg: []
         }
         this.onChange = this.onChange.bind(this)
         this.handleRegister = this.handleRegister.bind(this)
@@ -25,13 +26,49 @@ export default class RegisterForm extends Component {
     
     handleRegister(e) {
         e.preventDefault()
-        this.setState({loading: true})
-        authService.register(this.state.firstName, this.state.lastName, this.state.email, this.state.password).then(
-            () => {
-                this.setState({redirect: true, loading: false})
-                window.location.reload()
-            }
-        )
+        // Reset error messages
+        this.setState({msg: []})
+        let errorMsg = []
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i; // Regex to check if email format is valid
+
+        // Run validation checks, pushing appropriate messages to array if caught
+        if(!this.state.email) {
+            errorMsg.push("Email cannot be empty!")
+        } else if(!regex.test(this.state.email)) {
+            errorMsg.push("Email is invalid!")
+        }
+        if(!this.state.password) {
+            errorMsg.push("Password cannot be empty!")
+        } else if(this.state.password.length < 6) {
+            errorMsg.push("Password must be more than 6 characters!")
+        }
+        if(this.state.password !== this.state.passConf) {
+            errorMsg.push("Passwords do not match!")
+        }
+        if(!this.state.firstName) {
+            errorMsg.push("First Name cannot be empty!")
+        }
+        if(!this.state.lastName) {
+            errorMsg.push("Last Name cannot be empty!")
+        }
+
+        // Set error messages to state
+        this.setState({msg: errorMsg})
+
+        // If error messages are empty, attempt register
+        if(!errorMsg[0]) {
+            this.setState({loading: true})
+            authService.register(this.state.firstName, this.state.lastName, this.state.email, this.state.password).then(
+                () => {
+                    this.setState({redirect: true, loading: false})
+                    window.location.reload()
+                }
+            ).catch(function (error) {
+                if(error.response) {
+                    this.setState({msg: ["Something went wrong!"], loading: false})
+                }
+            })
+        }
     }
 
     render() {
@@ -54,10 +91,14 @@ export default class RegisterForm extends Component {
             }
             return "Register"
         }
+        const errorMessages = this.state.msg.map(message => {
+            return <p>{message}</p>
+        })
+
         return (
             <div>
                 <Container className="text-center">
-                    <p></p>
+                    {errorMessages}
                     <Row style={{justifyContent: 'center'}}>
                         <div className="card card-container bg-dark">
                             <Form style={{padding: '5rem', width: '30rem'}}>

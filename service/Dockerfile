@@ -1,4 +1,4 @@
-FROM ecr.tooling.dvla.gov.uk/base-images/openjre:8u191-jre
+FROM openjdk:8-jre-slim
 WORKDIR /app
 COPY target/service-0.0.1-SNAPSHOT.jar /app/service.jar
 

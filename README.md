@@ -8,7 +8,19 @@ A full-stack application to allow users to manage personalised plates.
 
 ## Installation
 
-When in root directory with `docker-compose.yml` Use docker compose to build containers:
+First, navigate to the `service` directory. Then type:
+
+```bash
+./mvnw clean package
+```
+
+Or if you have Maven installed:
+
+```bash
+mvn clean package
+```
+
+Then naviagate to the root directory where `docker-compose.yml` is located. Use docker compose to build containers:
 
 ```bash
 docker compose build
@@ -27,3 +39,10 @@ docker compose up
 ## Usage
 
 Visit `localhost:1337` in your browser to access the front-end. Create an account by registering under `My Account` and logging in.
+
+## TO DO
+
+- Fix CORS issue on /login route
+```
+Access to XMLHttpRequest at 'http://localhost:9300/login' from origin 'http://localhost:1337' has been blocked by CORS policy: The 'Access-Control-Allow-Origin' header has a value 'http://localhost:3000' that is not equal to the supplied origin.
+```

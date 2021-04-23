@@ -39,10 +39,3 @@ docker compose up
 ## Usage
 
 Visit `localhost:1337` in your browser to access the front-end. Create an account by registering under `My Account` and logging in.
-
-## TO DO
-
-- Fix CORS issue on /login route
-```
-Access to XMLHttpRequest at 'http://localhost:9300/login' from origin 'http://localhost:1337' has been blocked by CORS policy: The 'Access-Control-Allow-Origin' header has a value 'http://localhost:3000' that is not equal to the supplied origin.
-```

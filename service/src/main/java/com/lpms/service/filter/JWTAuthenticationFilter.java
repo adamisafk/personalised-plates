@@ -50,7 +50,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .withSubject(((User) auth.getPrincipal()).getUsername())
                 .withExpiresAt(new Date(System.currentTimeMillis() + AuthenticationConfigConstants.EXPIRATION_TIME))
                 .sign(Algorithm.HMAC512(AuthenticationConfigConstants.SECRET.getBytes()));
-        response.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+        response.setHeader("Access-Control-Allow-Origin", "*");
         response.setContentType("application/json");
             response.setCharacterEncoding("UTF-8");
             response.getWriter().write(

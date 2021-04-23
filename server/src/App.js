@@ -12,6 +12,8 @@ import LoginForm from './components/subcomponents/LoginForm';
 import RegisterForm from './components/subcomponents/RegisterForm';
 import Logout from './components/subcomponents/Logout';
 
+// Router DOM is used to return certain components if the URL matches
+
 function App() {
   return (
     <div className="App">

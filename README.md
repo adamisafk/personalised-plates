@@ -20,7 +20,7 @@ Or if you have Maven installed:
 mvn clean package
 ```
 
-Then naviagate to the root directory where `docker-compose.yml` is located. Use docker compose to build containers:
+Then navigate to the root directory where `docker-compose.yml` is located. Use docker compose to build containers:
 
 ```bash
 docker compose build
